@@ -1,0 +1,91 @@
+### Comandos mais utilizados ###
+
+#PRIMEIRO PASSO:
+
+    # subir os containers:
+        docker-compose up -d --build
+
+    # reiniciar os containers:
+        docker-compose up -d
+
+#SEGUNDO PASSO:
+
+    # Instalar o laravel na pasta raiz ./src --> Não precisa ser executado novamente
+        #docker-compose run composer create-project --prefer-dist laravel/laravel .
+
+    #Em caso de erro de permissão, dar permissão para acessar os arquivos do src
+        sudo chmod -R 777 src
+
+#TERCEIRO PASSO:
+
+    # Ajustar dados da conexao com banco de dados: --> Não precisa ser ajustado novamente
+    # /src/env e adicionar as informações configuradas no docker-compose.yml
+
+    #rodar comandos migrate, para validar se os dados estão gravando na base de dados - raiz principal
+        docker-compose run artisan migrate
+
+    #Criar a model de produtos: --> Não precisa ser executado novamente
+        #docker-compose run artisan make:model Product -m
+
+#QUARTO PASSO:
+
+    #GERAR DADOS FAKE PARA products
+
+        #Gerando arquivo de Factories de produtos --> Não precisa ser executado novamente
+            #docker-compose run artisan make:factory ProductFactory --model=Product
+
+        # Obs: Configurado no arquivo DatabaseSeeder os fake somente dos produtos podendo ser gerado mais outras classes
+        # O Seeder é executado, que por sua vez chama o ProductFactory, nele está as configurações para cadastro dos dados fake. 
+
+            docker-compose run artisan db:seed --class=DatabaseSeeder
+
+        #Após rodar os dados fake, verificar se a api está retornando os produtos:
+        http://localhost:7000/api/products
+
+#QUINTO PASSO:
+
+    #Criar os testes de products - Não precisa ser executado novamente
+        #docker-compose run artisan make:test ProductTest --unit
+
+    #Realizar os testes:
+
+    #Na raíz do projeto (src/) executar o teste desejado
+        #Testar as funcões dos Products
+
+        #Testa todos os testes
+        #vendor/bin/phpunit 
+
+        #testa o test específico
+        vendor/bin/phpunit -- 
+
+#SEXTO PASSO:
+    #Testando API no Postman /get
+    Para visualizar os dados da API, adicionar a url abaixo no campo de GET/URL: 
+    http://localhost:7000/api/products
+
+
+#OUTROS COMANDOS ÚTEIS
+    #visualzar os containers que foram criados:
+        docker ps
+
+    #stop containers
+        docker stop <containers id>
+
+    # Remover containers
+        docker container rm <id>
+
+    #Remover múltiplas imagens
+        docker images rmi <image_id>
+
+    #verificar se o server subiu:
+        localhost:7000
+
+
+Observações: Não foi tratada a parte de front, não foi tratada a parte de autenticação
+
+
+#Cria controller e a resources
+docker-compose run artisan make:controller ProductController --resource
+
+
+
